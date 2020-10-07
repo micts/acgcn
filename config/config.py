@@ -12,12 +12,12 @@ class Config(object):
 
         self.model_name = model_name # 'baseline' or 'gcn'
 
-        self.annot_path = '../DALY/'
-        self.data_path = '../DALY/daly_frames_224_224/'
+        self.annot_path = 'data/DALY/annotations/'
+        self.data_path = '../DALY/daly_frames_224_224/' # 'data/DALY/frames/
         self.results_path = 'results/'
         self.scores_path = 'scores/'
         self.am_path = 'am/'
-        self.features_path = 'features/'
+        self.features_path = 'extracted_features/'
         self.i3d_weights_path = 'models/'
         self.filename = ''
 
