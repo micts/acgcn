@@ -72,7 +72,8 @@ Several videos of DALY are not available on Youtube anymore, and others have dif
 Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we extract the frames from each video using
 
 ```
-./extract_frames.sh data/DALY/DALY_videos data/DALY/DALY_frames 
+cd utils/
+./extract_frames.sh ../data/DALY/DALY_videos ../data/DALY/DALY_frames 
 ```
 
 The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`.
@@ -82,12 +83,13 @@ The above command uses `ffmpeg` to extract the frames, and saves them under `dat
 We resize all frames to 224x224 pixels.
 
 ```
-./resize_frames data/DALY/DALY_frames data/DALY/frames
+python resize_frames.py ../data/DALY/DALY_frames ../data/DALY/frames 224 224
 ```
 
 `data/DALY/frames` now contains the resized frames. We can remove the original frames and videos.
 
 ``` 
+cd ..
 rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 ```
 
