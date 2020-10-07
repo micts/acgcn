@@ -44,7 +44,7 @@ Clone this repository.
 git clone https://github.com/micts/acgcn.git
 ```
 
-Add the repository's directory to `$PYTHONPATH` by adding the following line to `.bashrc`
+Add the repository's directory to `$PYTHONPATH` by adding the following line to your `.bashrc` file
 
 ```
 export PYTHONPATH=/path/to/this/repo/lib:$PYTHONPATH
@@ -60,12 +60,50 @@ source ~/.bashrc
 
 We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.inrialpes.fr/daly/index.php.
 
-### Download
+### Download Videos
 
 See [instructions](http://thoth.inrialpes.fr/daly/getdaly.php) on how to download DALY.
 
 **Important Note**    
 Several videos of DALY are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the original videos from Inria's cache, which can be accessed at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). In case there are missing videos, you can always try to download them from Youtube, see link for instructions above.
+
+### Extract Frames
+
+Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we extract the frames from each video using
+
+```
+./extract_frames.sh data/DALY/DALY_videos data/DALY/DALY_frames 
+```
+
+The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`. We can now remove the downloaded videos.
+
+```
+rm -rf data/DALY/DALY_videos
+```
+
+### Resize Frames
+
+We resize all frames to 224x224 pixels.
+
+```
+./resize_frames data/DALY/DALY_frames data/DALY/frames
+```
+
+`data/DALY/frames` now contains the resized frames. We can remove the original frames.
+
+``` 
+rm -rf data/DALY/DALY_frames
+```
+
+### File Structure
+
+
+
+
+
+
+
+
 
 
 
