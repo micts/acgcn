@@ -65,7 +65,7 @@ We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.
 See instructions on how to download DALY: http://thoth.inrialpes.fr/daly/getdaly.php. 
 
 **Important Note**    
-Several videos are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the videos from Inria's cache, which contains the original videos. You can access the cache at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). In case there are missing videos, you can always try to download them from Youtube, see link for instructions above.
+Several videos of DALY are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the videos from Inria's cache, which contains the original videos. You can access the cache at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). In case there are missing videos, you can always try to download them from Youtube, see link for instructions above.
 
 
 
