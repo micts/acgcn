@@ -2,28 +2,27 @@ import os
 from PIL import Image
 import pickle
 
-def resize_videos(load_path, save_path, new_width=224, new_height=224):
+def resize_frames(load_path, save_path, size=(224, 224)):
     """
     load_path: path of videos to be resized
     save_path: path of resized videos to be saved
     """
+    width, height = size
+    
     if not os.path.exists(save_path):
         os.mkdir(save_path)
-    else:
-        assert False, 'Cannot create directory. Directory already exists.'
 
-    with open('/project/DALY/all_videos.pkl', 'rb') as f:
-        all_videos = pickle.load(f)
+    all_videos = os.listdir(load_path)
 
     for video_idx, video in enumerate(all_videos):
-        print('Video', video_idx, '/', len(all_videos))
+        print('Resizing video {}... | {}/{}'.format(video, video_idx + 1, len(all_videos)))
         os.mkdir(os.path.join(save_path, video))
         video_path = os.path.join(load_path, video)
         video_frames = os.listdir(video_path)
         for frame in video_frames:
             img = Image.open(os.path.join(video_path, frame))
-            assert (new_width <= img.width) and (new_height <= img.height)
-            img = img.resize((new_width, new_height), Image.ANTIALIAS)
+            assert (width <= img.width) and (height <= img.height)
+            img = img.resize((width, height), Image.ANTIALIAS)
             img.save(os.path.join(save_path, video, frame))
 
 def rename_videos(load_path):
