@@ -6,7 +6,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 
 ## Requirements    
 `python 3.7`  
-`pytorch >= 1.2.0 (CUDA 9.2, cuDNN v7.6.2)`  
+`pytorch 1.2.0 (CUDA 9.2, cuDNN v7.6.2)`  
 `torchvision 0.4.0`    
 `numpy >= 1.17`
 
