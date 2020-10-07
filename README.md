@@ -89,8 +89,7 @@ python resize_frames.py ../data/DALY/DALY_frames ../data/DALY/frames 224 224
 `data/DALY/frames` now contains the resized frames. We can remove the original frames and videos.
 
 ``` 
-cd ..
-rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
+rm -rf ../data/DALY/DALY_frames ../data/DALY/DALY_videos
 ```
 
 ### File Structure
