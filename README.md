@@ -10,7 +10,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 `torchvision 0.4.0`    
 `numpy >= 1.17`
 
-Optionally, for visualizations    
+Optionally, for visualizations:  
 `matplotlib`    
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
