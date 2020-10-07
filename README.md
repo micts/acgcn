@@ -97,6 +97,8 @@ rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 
 ### File Structure
 
+The file structure under `data/DALY/` is as follows:
+
 ```
 DALY/
 |_ annotations
