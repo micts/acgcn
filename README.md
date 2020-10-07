@@ -88,8 +88,7 @@ We resize all frames to 224x224 pixels.
 `data/DALY/frames` now contains the resized frames. We can remove the original frames and videos.
 
 ``` 
-rm -rf data/DALY/DALY_frames 
-rm -rf data/DALY/DALY_videos
+rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 ```
 
 ### File Structure
