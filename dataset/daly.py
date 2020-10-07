@@ -38,12 +38,14 @@ def get_frames(annot_data, cfg, split='training', on_keyframes=False):
     ######################################
     available_videos = os.listdir(cfg.data_path)
     ######################################
-
+    print(len(available_videos))
     if split == 'training':
         frames = []
         for i, video in enumerate(annot_data[split]):
             ########################################
             if video not in available_videos:
+                continue
+            if video == 'Jy8JurvYlH4.mp4':
                 continue
             ########################################
             if cfg.zero_shot:

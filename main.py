@@ -1,7 +1,7 @@
 import sys
 import argparse
-import config
-import train
+from config import config
+from tools import train
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-mn', '--model_name', default='gcn', help='model name: \'baseline\' or \'gcn\'')
