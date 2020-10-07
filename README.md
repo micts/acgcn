@@ -2,6 +2,8 @@
 
 Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection".
 
+acgcn -- Actor-Context/Centric Graph Convolutional Networks. 
+
 ## Requirements    
 `python 3.7`  
 `pytorch >= 1.2.0 (CUDA 9.2, cuDNN v7.6.2)`  
