@@ -15,20 +15,20 @@ Optionally, for visualizations
 
 ## Installation
 
-Create a conda environment.
+Create a conda environment:
 
 ```
 conda create -n myenv python=3.7
 source activate myenv
 ```
 
-Install requirements using
+Install requirements using:
 
 ```
 conda install --file requirements.txt
 ```
 
-Finally, install PyTorch and torchvision.
+Finally, install PyTorch and torchvision:
 
 ```
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
@@ -38,19 +38,19 @@ conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
 
 ## Getting Started
 
-Clone this repository.
+Clone this repository:
 
 ``` 
 git clone https://github.com/micts/acgcn.git
 ```
 
-Add the repository's directory to `$PYTHONPATH` by adding the following line to your `.bashrc` file
+Add the repository's directory to `$PYTHONPATH` by adding the following line to your `.bashrc` file:
 
 ```
 export PYTHONPATH=/path/to/this/repo/lib:$PYTHONPATH
 ```
 
-Then apply the changes.
+Finally, apply the changes:
 
 ```
 source ~/.bashrc
@@ -69,7 +69,7 @@ Several videos of DALY are not available on Youtube anymore, and others have dif
 
 ### Extract Frames
 
-Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we extract the frames from each video using
+Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we extract the frames from each video using:
 
 ```
 cd utils/
@@ -80,13 +80,13 @@ The above command uses `ffmpeg` to extract the frames, and saves them under `dat
 
 ### Resize Frames
 
-We resize all frames to 224x224 pixels.
+We resize all frames to 224x224 pixels:
 
 ```
 python resize_frames.py ../data/DALY/DALY_frames ../data/DALY/frames 224 224
 ```
 
-`data/DALY/frames` now contains the resized frames. We can remove the original frames and videos.
+`data/DALY/frames` now contains the resized frames. We can remove the original frames and videos:
 
 ``` 
 rm -rf ../data/DALY/DALY_frames ../data/DALY/DALY_videos
