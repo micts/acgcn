@@ -2,9 +2,7 @@
 
 Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection".
 
-## Installation
-
-### Requirements
+## Requirements    
 `python 3.7`  
 `pytorch >= 1.2.0 (CUDA 9.2, cuDNN v7.6.2)`  
 `torchvision 0.4.0`    
@@ -15,7 +13,7 @@ Optionally, for visualizations
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
 
-### Install Requirements
+## Installation
 
 Create a conda environment.
 
@@ -36,6 +34,8 @@ Finally, install PyTorch and torchvision.
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
 ```
 
+
+
 ## Getting Started
 
 Clone this repository.
@@ -44,7 +44,7 @@ Clone this repository.
 git clone https://github.com/micts/acgcn.git
 ```
 
-Add the repository's directory to `$PYTHONPATH` by adding the following line in `.bashrc`
+Add the repository's directory to `$PYTHONPATH` by adding the following line to `.bashrc`
 
 ```
 export PYTHONPATH=/path/to/this/repo/lib:$PYTHONPATH
@@ -55,6 +55,10 @@ Then apply the changes.
 ```
 source ~/.bashrc
 ```
+
+## Data Preperation
+Download DALY dataset from 
+
 
 
 
