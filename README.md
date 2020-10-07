@@ -57,7 +57,10 @@ source ~/.bashrc
 ```
 
 ## Data Preperation
-Download DALY dataset from 
+
+We use the Daily Action on Localization in Youtube (DALY) dataset. See instructions on how to download DALY: http://thoth.inrialpes.fr/daly/getdaly.php. 
+
+Several videos are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the videos from Inria's cache, which contains the original videos. You can access the cache at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommendd to check that all videos are available in the cache. Otherwise, you can still try to download the missing videos from Youtube, see instructions above.
 
 
 
