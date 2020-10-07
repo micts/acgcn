@@ -75,11 +75,7 @@ Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we ex
 ./extract_frames.sh data/DALY/DALY_videos data/DALY/DALY_frames 
 ```
 
-The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`. We can now remove the downloaded videos.
-
-```
-rm -rf data/DALY/DALY_videos
-```
+The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`.
 
 ### Resize Frames
 
@@ -89,10 +85,11 @@ We resize all frames to 224x224 pixels.
 ./resize_frames data/DALY/DALY_frames data/DALY/frames
 ```
 
-`data/DALY/frames` now contains the resized frames. We can remove the original frames.
+`data/DALY/frames` now contains the resized frames. We can remove the original frames and videos.
 
 ``` 
-rm -rf data/DALY/DALY_frames
+rm -rf data/DALY/DALY_frames 
+rm -rf data/DALY/DALY_videos
 ```
 
 ### File Structure
