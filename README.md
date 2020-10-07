@@ -24,7 +24,7 @@ conda create -n myenv python=3.7
 source activate myenv
 ```
 
-Install requirements using:
+Install requirements:
 
 ```
 conda install --file requirements.txt
