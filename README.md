@@ -58,7 +58,7 @@ source ~/.bashrc
 
 ## Data Preperation
 
-We use the Daily Action on Localization in Youtube ([DALY](http://thoth.inrialpes.fr/daly/index.php)) dataset.
+We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.inrialpes.fr/daly/index.php.
 
 ### Download
 
