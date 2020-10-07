@@ -97,15 +97,20 @@ rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 
 ### File Structure
 
-
-
-
-
-
-
-
-
-
-
-
-
+DALY/
+|_ annotations
+|  |_ all_training_videos.pkl
+|  |_ all_videos.pkl
+|  |_ daly1.1.0.pkl
+|  |_ frames_size.pkl
+|  |_ training_videos.pkl
+|  |_ validation_videos.pkl
+|_ frames  
+|  |_ video_name_0.mp4
+|  |  |_ frame000001.jpg
+|  |  |_ frame000002.jpg
+|  |  |_ ...
+|  |_ video_name_1.mp4
+|  |  |_ frame000001.jpg
+|  |  |_ frame000002.jpg
+|  |  |_ ...
