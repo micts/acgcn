@@ -155,7 +155,13 @@ sh run/test_gcn.sh
 Inference using a Baseline model:
 
 ```
-sh run/test_baselilne.sh
+sh run/test_baseline.sh
+```
+
+Both commands above run `inference.py`. For help and a description of input arguments:
+
+```
+python inference.py -h
 ```
 
 
