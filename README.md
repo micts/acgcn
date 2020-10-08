@@ -29,6 +29,8 @@ Optionally, for visualizations:
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
 
+<a name="installation"/>      
+
 ## Installation
 
 Create a conda environment:
@@ -50,7 +52,7 @@ Finally, install PyTorch and torchvision:
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
 ```
 
-
+<a name="gettingstarted"/>      
 
 ## Getting Started
 
