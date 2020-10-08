@@ -18,9 +18,8 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
   * [Inference](#inference)
 * [Acknowledgments](#acknowledgments)
 
-<a name="requirements"/>    
 
-## Requirements    
+## Requirements<a name="requirements"/>          
 
 `python 3.7`  
 `pytorch 1.2.0 (CUDA 9.2, cuDNN v7.6.2)`  
@@ -33,9 +32,8 @@ Optionally, for visualizations:
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
 
-<a name="installation"/>      
 
-## Installation
+## Installation<a name="installation"/>      
 
 Create a conda environment:
 
@@ -56,9 +54,8 @@ Finally, install PyTorch and torchvision:
 conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
 ```
 
-<a name="gettingstarted"/>      
 
-## Getting Started
+## Getting Started<a name="gettingstarted"/>      
 
 Clone this repository:
 
@@ -82,18 +79,16 @@ source ~/.bashrc
 
 We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.inrialpes.fr/daly/index.php.
 
-<a name="downloadvideos"/>    
 
-### Download Videos
+### Download Videos<a name="downloadvideos"/>     
 
 See [instructions](http://thoth.inrialpes.fr/daly/getdaly.php) on how to download DALY.
 
 **Important Note**    
 Several videos of DALY are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the original videos from Inria's cache, which can be accessed at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). In case there are missing videos, you can always try to download them from Youtube, see link for instructions above.
 
-<a name="extractframes"/>        
 
-### Extract Frames
+### Extract Frames<a name="extractframes"/>        
 
 Assuming that the downloaded videos are placed in `data/DALY/DALY_videos`, we extract the frames from each video using:
 
@@ -104,9 +99,8 @@ cd utils/
 
 The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`.
 
-<a name="resizeframes"/>    
 
-### Resize Frames
+### Resize Frames<a name="resizeframes"/>    
 
 We resize all frames to 224x224 pixels:
 
@@ -121,9 +115,8 @@ cd ..
 rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 ```
 
-<a name="filestructure"/>    
 
-### File Structure
+### File Structure<a name="filestructure"/>    
 
 The file structure under `data/DALY/` should be as follows:
 
@@ -147,15 +140,12 @@ DALY/
 |  |  |_ ...
 ```
 
-<a name="howtouse"/>    
 
-## How to Use
+## How to Use<a name="howtouse"/>    
 
-<a name="training"/>    
+In the following, we describe the process of training and testing the Baseline model and the GCN model. Both models use I3D as a backbone (pre-trained on Imagenet + Kinetics-400) and augmented with a RoI pooling layer for action detection. The GCN model further incorporates Graph Convolutional Networks to model actor-context relations as actor-object and actor-actor interactions.   
 
-### Training
-
-In the following, we describe the process of training and testing the Baseline model and the GCN model. Both models use I3D as a backbone (pre-trained on Imagenet + Kinetics-400) and augmented with a RoI pooling layer for action detection. The GCN model further incorporates Graph Convolutional Networks to model actor-context relations as actor-object and actor-actor interactions.
+### Training<a name="training"/>    
 
 Train a GCN model:
 ```
@@ -175,9 +165,8 @@ python main.py -h
 
 Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm-ss`, i.e. `2020-03-25_23-56-26`. Results, such as model's training history, are saved under `results/model_name/filename`, for example `results/gcn/2020-03-25_23-56-26`. The directory contains a pickle file with the content of `config.py` (model's hyperparameters and other configuration settings), and a series of `.pth` files. A `.pth` file is of the form `epoch_x_loss.pth`, where `x` indicates the epoch number, and `loss` corresponds to the epoch's validation loss. e.g. `epoch_300_1.108.pth`. A `.pth` file contains, for a specific epoch, saved model's weights, epoch's training and validation loss, and evaluation metric results. The files are saved every *x*-number of epochs (see `num_epochs_to_val` in `config.py`). 
 
-<a name="inference"/>    
 
-### Inference  
+### Inference<a name="inference"/>      
 
 Inference on the test set using a GCN model:
 
@@ -198,9 +187,11 @@ python inference.py -h
 ```
 
 
-<a name="acknowledgments"/>    
 
-## Acknowledgments
+
+
+
+## Acknowledgments<a name="acknowledgments"/>    
 
 We would like to thank Philippe Weinzaepfel for providing us the predicted human tubes.  
 
