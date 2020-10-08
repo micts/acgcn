@@ -16,7 +16,6 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [How to Use](#howtouse)
   * [Training](#training)
   * [Inference](#inference)
-* [How to Use](#howtouse) 
 * [Acknowledgments](#acknowledgments)
 
 <a name="requirements"/>    
@@ -79,9 +78,7 @@ Finally, apply the changes:
 source ~/.bashrc
 ```
 
-<a name="datapreperation"/>          
-
-## Data Preperation
+## Data Preperation<a name="datapreparation"/>          
 
 We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.inrialpes.fr/daly/index.php.
 
