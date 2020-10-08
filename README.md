@@ -144,7 +144,19 @@ python main.py -h
 
 Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm-ss`, i.e. `2020-03-25_23-56-26`. Results, such as model's training history, are saved under `results/model_name/filename`, for example `results/gcn/2020-03-25_23-56-26`. The directory contains a pickle file with the content of `config.py` (model's hyperparameters and other configuration settings), and a series of `.pth` files. A `.pth` file is of the form `epoch_x_loss.pth`, where `x` indicates the epoch number, and `loss` corresponds to the epoch's validation loss. e.g. `epoch_300_1.108.pth`. A `.pth` file contains, for a specific epoch, saved model's weights, epoch's training and validation loss, and evaluation metric results. The files are saved every *x*-number of epochs (see `num_epochs_to_val` in `config.py`). 
 
-### Inference
+### Inference  
+
+Inference on the test set using a GCN model:
+
+```
+sh run/test_gcn.sh
+```
+
+Inference using a Baseline model:
+
+```
+sh run/test_baselilne.sh
+```
 
 
 
