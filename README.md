@@ -9,6 +9,15 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [Installation](#installation)
 * [Getting Started](#gettingstarted)
   * [Data Preparation](#datapreparation)
+  * [Download Videos](#downloadvideos)
+  * [Extract Frames](#extractframes)
+  * [Resize Frames](#resizeframes)
+  * [File Structure](#filestructure)
+* [How to Use](#howtouse)
+  * [Training](#training)
+  * [Inference](#inference)
+* [How to Use](#howtouse) 
+* [Acknowledgments](#acknowledgments)
 
 <a name="requirements"/>    
 
@@ -70,10 +79,13 @@ Finally, apply the changes:
 source ~/.bashrc
 ```
 
+<a name="datapreperation"/>          
 
 ## Data Preperation
 
 We use the Daily Action on Localization in Youtube (DALY) dataset: http://thoth.inrialpes.fr/daly/index.php.
+
+<a name="downloadvideos"/>    
 
 ### Download Videos
 
@@ -81,6 +93,8 @@ See [instructions](http://thoth.inrialpes.fr/daly/getdaly.php) on how to downloa
 
 **Important Note**    
 Several videos of DALY are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the original videos from Inria's cache, which can be accessed at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). In case there are missing videos, you can always try to download them from Youtube, see link for instructions above.
+
+<a name="extractframes"/>        
 
 ### Extract Frames
 
@@ -92,6 +106,8 @@ cd utils/
 ```
 
 The above command uses `ffmpeg` to extract the frames, and saves them under `data/DALY/DALY_frames`.
+
+<a name="resizeframes"/>    
 
 ### Resize Frames
 
@@ -107,6 +123,8 @@ python resize_frames.py ../data/DALY/DALY_frames ../data/DALY/frames 224 224
 cd ..
 rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 ```
+
+<a name="filestructure"/>    
 
 ### File Structure
 
@@ -132,7 +150,11 @@ DALY/
 |  |  |_ ...
 ```
 
+<a name="howtouse"/>    
+
 ## How to Use
+
+<a name="training"/>    
 
 ### Training
 
@@ -156,6 +178,8 @@ python main.py -h
 
 Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm-ss`, i.e. `2020-03-25_23-56-26`. Results, such as model's training history, are saved under `results/model_name/filename`, for example `results/gcn/2020-03-25_23-56-26`. The directory contains a pickle file with the content of `config.py` (model's hyperparameters and other configuration settings), and a series of `.pth` files. A `.pth` file is of the form `epoch_x_loss.pth`, where `x` indicates the epoch number, and `loss` corresponds to the epoch's validation loss. e.g. `epoch_300_1.108.pth`. A `.pth` file contains, for a specific epoch, saved model's weights, epoch's training and validation loss, and evaluation metric results. The files are saved every *x*-number of epochs (see `num_epochs_to_val` in `config.py`). 
 
+<a name="inference"/>    
+
 ### Inference  
 
 Inference on the test set using a GCN model:
@@ -176,6 +200,8 @@ Both commands above run `inference.py`. For help and a description of input argu
 python inference.py -h
 ```
 
+
+<a name="acknowledgments"/>    
 
 ## Acknowledgments
 
