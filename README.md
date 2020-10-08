@@ -24,6 +24,8 @@ Optionally, for visualizations:
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
 
+<a name="installation"/>      
+
 ## Installation
 
 Create a conda environment:
