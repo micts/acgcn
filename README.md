@@ -1,6 +1,6 @@
 # acgcn
 
-Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection".
+Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection (Submitted to DL-HAU2020 workshop - ICPR 2020)".
 
 acgcn -- Actor-Context/Centric Graph Convolutional Networks. 
 
