@@ -120,4 +120,35 @@ DALY/
 |  |  |_ ...
 ```
 
+## Training and Inference
+
+In the following, we describe the process of training and testing the Baseline model and the GCN model. Both models use I3D as a backbone (pre-trained on Imagenet + Kinetics-400) and augmented with a RoI pooling layer for action detection. The GCN model further incorporates Graph Convolutional Networks to model actor-context relations as actor-object and actor-actor interactions.
+
+Train a GCN model:
+```
+sh run/train_gcn.sh
+```
+
+Train a Baseline model:
+```
+sh run/train_baseline.sh
+```
+
+Both scripts above call `main.py`. For help and description of the input arguments:
+
+```
+python main.py -h
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
