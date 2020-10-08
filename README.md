@@ -120,7 +120,7 @@ DALY/
 |  |  |_ ...
 ```
 
-## Training and Inference
+## How to Use
 
 ### Training
 
