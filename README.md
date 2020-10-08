@@ -4,7 +4,7 @@ Official PyTorch implementation of paper "Spot What Matters: Learning Context Us
 
 acgcn -- Actor-Context/Centric Graph Convolutional Networks. 
 
-![Screenshot](framework_overview.png?raw=true)
+<img src="framework_overview.png" width="70%" height="70%">
 
 ## Table of Contents  
 * [Requirements](#requirements)  
