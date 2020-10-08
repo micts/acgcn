@@ -165,7 +165,9 @@ python inference.py -h
 ```
 
 
+## Acknowledgments
 
+We would like to thank Philippe Weinzaepfel for providing us the predicted human tubes.  
 
 
 
