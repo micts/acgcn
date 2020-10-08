@@ -7,8 +7,14 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 ## Table of Contents  
 * [Requirements](#requirements)  
 * [Installation](#installation)
+* [Getting Started](#gettingstarted)
+  * [Data Preperation](#datapreperation)
 
 <a name="requirements"/>    
+<a name="installation"/>      
+<a name="gettingstarted"/>      
+<a name="datapreperation"/>          
+
 
 ## Requirements    
 
@@ -22,8 +28,6 @@ Optionally, for visualizations:
 `matplotlib`    
 `scipy >= 1.3.0`       
 `scikit-learn >= 0.22.2`     
-
-<a name="installation"/>      
 
 ## Installation
 
