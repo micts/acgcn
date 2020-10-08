@@ -11,11 +11,6 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
   * [Data Preperation](#datapreperation)
 
 <a name="requirements"/>    
-<a name="installation"/>      
-<a name="gettingstarted"/>      
-<a name="datapreperation"/>          
-
-
 ## Requirements    
 
 `python 3.7`  
