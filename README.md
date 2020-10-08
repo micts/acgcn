@@ -9,7 +9,6 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [Installation](#installation)
 
 <a name="requirements"/>    
-<a name="installation"/>    
 
 ## Requirements    
 
