@@ -11,6 +11,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
   * [Data Preperation](#datapreperation)
 
 <a name="requirements"/>    
+
 ## Requirements    
 
 `python 3.7`  
@@ -68,6 +69,8 @@ Finally, apply the changes:
 ```
 source ~/.bashrc
 ```
+
+<a name="datapreperation"/>          
 
 ## Data Preperation
 
