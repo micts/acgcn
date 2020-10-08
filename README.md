@@ -8,7 +8,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [Requirements](#requirements)  
 * [Installation](#installation)
 * [Getting Started](#gettingstarted)
-  * [Data Preperation](#datapreperation)
+  * [Data Preparation](#datapreparation)
 
 <a name="requirements"/>    
 
@@ -70,7 +70,6 @@ Finally, apply the changes:
 source ~/.bashrc
 ```
 
-<a name="datapreperation"/>          
 
 ## Data Preperation
 
