@@ -8,7 +8,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [Requirements](#requirements)  
 * [Installation](#installation)
 * [Getting Started](#gettingstarted)
-  * [Data Preparation](#datapreparation)
+* [Data Preparation](#datapreparation)
   * [Download Videos](#downloadvideos)
   * [Extract Frames](#extractframes)
   * [Resize Frames](#resizeframes)
