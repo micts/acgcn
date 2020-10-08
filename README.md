@@ -193,7 +193,7 @@ python inference.py -h
 
 ## Acknowledgments<a name="acknowledgments"/>    
 
-We would like to thank Philippe Weinzaepfel for providing us with the predicted human tubes.
+We would like to thank Philippe Weinzaepfel for providing us with the predicted human tubes of their tracking-by-detetion model.
 
 
 
