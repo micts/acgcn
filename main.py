@@ -4,13 +4,44 @@ from config import config
 from tools import train
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-mn', '--model_name', default='gcn', help='model name: \'baseline\' or \'gcn\'')
-parser.add_argument('-nl', '--num_layers', type=int, default=2, help='number of gcn layers')
-parser.add_argument('-ng', '--num_graphs', type=int, default=2, help='number of graphs per layer')
-parser.add_argument('-mf', '--merge_function', default='sum', help='function to merge output of multiple graphs in final layer: \'sum\' or \'concat\'')
-parser.add_argument('-zs', '--zero_shot', action='store_true', default=False, help='exclude certain classes during training; refer to config.py to modify the classes to be exluded')
+parser.add_argument('-m', '--mode', default='training', help='Mode: \'training\' or \'inference\'')
+parser.add_argument('-mn', '--model_name', default='gcn', help='Model name: \'baseline\' or \'gcn\'')
+parser.add_argument('-nl', '--num_layers', type=int, default=2, help='Number of gcn layers')
+parser.add_argument('-ng', '--num_graphs', type=int, default=2, help='Number of graphs per layer')
+parser.add_argument('-mf', '--merge_function', default='concat', help='Function to merge output of multiple graphs in final layer: \'sum\' or \'concat\'')
+parser.add_argument('-mc', '--model_checkpoint', help='Path to model\'s saved weights (model checkpoint). To be used for inference')
+parser.add_argument('-te', '--total_epochs', type=int, default=450, help='Total number of epochs')
+parser.add_argument('-we', '--warmup_epochs', type=int, default=0, help='Number of epochs to apply linear learning rate warm-up. Valid only when --init_lr is positive float.')
+parser.add_argument('-ilr', '--init_lr', help='Initial learning rate. Valid only when --warmup_epochs > 0.')
+parser.add_argument('-mlr', '--max_lr', type=float, default=4.7e-5, help='Maximum learning rate. Equivalent to --init_learning rate when --warmup_epochs=0')
+parser.add_argument('-bs', '--batch_size', type=int, default=3, help='Batch size')
+parser.add_argument('-zs', '--zero_shot', action='store_true', default=False, help='Exclude certain classes during training; refer to config.py to modify the classes to be exluded')
 
 args = parser.parse_args()
 
-cfg = config.Config(args.model_name, args.num_layers, args.num_graphs, args.merge_function, args.zero_shot)
-train.train(cfg)
+if self.warmup_epochs == 0:
+    if self.init_lr is not None:
+        warnings.warn("Warning: warmup_epochs is 0, while init_lr is greater than 0.\n Defaulting init_lr to None.")
+if self.init_lr is None:
+    if self.warmup_epochs > 0:
+        warnings.warn("Warning: init_lr is None, while warmup_epochs is greater than 0.\n Defaulting warmup_epochs to 0.")
+
+cfg = config.Config(args.mode,
+                    args.model_name,
+                    args.num_layers,
+                    args.num_graphs,
+                    args.merge_function,
+                    args.model_checkpoint,
+                    args.total_epochs,
+                    args.warmup_epochs,
+                    args.init_lr,
+                    args.max_lr,
+                    args.batch_size,
+                    args.zero_shot)
+
+if args.mode == 'training':
+    train.train(cfg)
+elif args.mode == 'inference':
+    inference.inference(cfg)
+else:
+    raise ValueError("{} is not a valid mode. Possible values for mode are: \'training\' or \'inference\'.".format(args.mode))
