@@ -1,5 +1,3 @@
-import warnings
-
 from utils import utils
 
 class Config(object):
