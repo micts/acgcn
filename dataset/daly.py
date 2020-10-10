@@ -45,8 +45,8 @@ def get_frames(annot_data, cfg, split='training', on_keyframes=False):
             ########################################
             if video not in available_videos:
                 continue
-            if video == 'Jy8JurvYlH4.mp4':
-                continue
+            #if video == 'Jy8JurvYlH4.mp4':
+            #    continue
             ########################################
             if cfg.zero_shot:
                 video_labels = list(annot['annot'][video]['annot'].keys())
@@ -74,7 +74,7 @@ def get_frames(annot_data, cfg, split='training', on_keyframes=False):
         else: 
             if split == 'validation' or split == 'test':
                 np.random.seed(1001) # always get the same samples across different models
-                num_frames = 10
+                num_frames = 10 # 10
                 frames = []
                 for video in annot_data[split]:
                     ########################################
