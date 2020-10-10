@@ -1,5 +1,7 @@
 import sys
 import argparse
+import warnings
+import time
 from config import config
 from tools import train
 
@@ -12,19 +14,24 @@ parser.add_argument('-mf', '--merge_function', default='concat', help='Function 
 parser.add_argument('-mc', '--model_checkpoint', help='Path to model\'s saved weights (model checkpoint). To be used for inference')
 parser.add_argument('-te', '--total_epochs', type=int, default=450, help='Total number of epochs')
 parser.add_argument('-we', '--warmup_epochs', type=int, default=0, help='Number of epochs to apply linear learning rate warm-up. Valid only when --init_lr is positive float.')
-parser.add_argument('-ilr', '--init_lr', help='Initial learning rate. Valid only when --warmup_epochs > 0.')
+parser.add_argument('-ilr', '--init_lr', type=float, help='Initial learning rate. Valid only when --warmup_epochs > 0.')
 parser.add_argument('-mlr', '--max_lr', type=float, default=4.7e-5, help='Maximum learning rate. Equivalent to --init_learning rate when --warmup_epochs=0')
 parser.add_argument('-bs', '--batch_size', type=int, default=3, help='Batch size')
 parser.add_argument('-zs', '--zero_shot', action='store_true', default=False, help='Exclude certain classes during training; refer to config.py to modify the classes to be exluded')
 
 args = parser.parse_args()
 
-if self.warmup_epochs == 0:
-    if self.init_lr is not None:
+if args.warmup_epochs == 0:
+    if args.init_lr is not None:
         warnings.warn("Warning: warmup_epochs is 0, while init_lr is greater than 0.\n Defaulting init_lr to None.")
-if self.init_lr is None:
-    if self.warmup_epochs > 0:
+        args.init_lr = None
+        time.sleep(3)
+if args.init_lr is None:
+    if args.warmup_epochs > 0:
         warnings.warn("Warning: init_lr is None, while warmup_epochs is greater than 0.\n Defaulting warmup_epochs to 0.")
+        args.warmup_epochs = 0
+        time.sleep(3)
+
 
 cfg = config.Config(args.mode,
                     args.model_name,
