@@ -194,7 +194,7 @@ sh run/test_baseline.sh
 Both commands above run `inference.py`. For help and a description of input arguments:
 
 ```
-python inference.py -h
+python tools/inference.py -h
 ```
 
 
