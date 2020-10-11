@@ -7,6 +7,7 @@ from tools import train
 
 # test this change
 # test also this change
+# test this too
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--mode', default='training', help='Mode: \'training\' or \'inference\'')
 parser.add_argument('-mn', '--model_name', required=True, help='Model name: \'baseline\' or \'gcn\'')
