@@ -5,6 +5,7 @@ import time
 from config import config
 from tools import train
 
+# test this change
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', '--mode', default='training', help='Mode: \'training\' or \'inference\'')
 parser.add_argument('-mn', '--model_name', required=True, help='Model name: \'baseline\' or \'gcn\'')
