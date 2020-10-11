@@ -4,11 +4,12 @@ class Config(object):
 
     def __init__(self,
                  mode,
+                 config_path,
                  model_name,
                  num_layers,
                  num_graphs,
                  merge_function,
-                 model_checkpoint,
+                 model_checkpoint_path,
                  total_epochs,
                  warmup_epochs,
                  init_lr,
