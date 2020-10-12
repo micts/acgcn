@@ -359,7 +359,7 @@ def save_config(cfg):
 
 def make_dirs(path):
     if not os.path.exists(path):
-        os.mkdirs(path)
+        os.makedirs(path)
 
 def save_scores(scores, labels, num_actors_list, scores_dict, video_names, instances, center_frames):
 
