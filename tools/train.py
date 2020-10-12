@@ -17,6 +17,8 @@ from torch.optim import lr_scheduler
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LambdaLR
 
+sys.path.append('.')
+
 from config import config
 from dataset import dataset
 from models import gcn_model, baseline_model
@@ -103,7 +105,7 @@ def prepare_training(cfg):
     if cfg.use_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = cfg.device_list
 
-    utils.print_config(cfg)
+    #utils.print_config(cfg)
 
     training_set, validation_set = dataset.return_dataset(cfg)
     datasets = {'train': training_set, 'val': validation_set}
@@ -295,11 +297,11 @@ def train(dataloaders, datasets, model, device, optimizer, cfg):
         #save intermediate model and results
 
         if epoch % cfg.num_epochs_to_val == 0:
-            results['model_state_dict'] = model.state_dict(),
-            results['optimizer_state_dict'] = optimizer.state_dict(),
-
+            results['model_state_dict'] = model.state_dict()
+            results['optimizer_state_dict'] = optimizer.state_dict()
+            torch.save(results, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_{}_{:.3f}.pth'.format(str(epoch).zfill(3), epoch_loss)))
         # always save?
-        torch.save(results, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_{}_{:.3f}.pth'.format(str(epoch).zfill(3), val_loss))
+        #torch.save(results, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_{}_{:.3f}.pth'.format(str(epoch).zfill(3), epoch_loss)))
 
 
         # if cfg.save_log:
@@ -355,17 +357,17 @@ if __name__ == '__main__':
     parser.add_argument('--max_lr', type=float, required=True, help='Maximum learning rate')
     parser.add_argument('--min_lr', type=float, default=0, help='Minimum learning rate')
     parser.add_argument('--batch_size', type=int, default=3, help='Batch size')
-    parser.add_argument('--gpu_device', default=0, type=int, help='GPU device (number) to use; defaults to 0')
+    parser.add_argument('--gpu_device', default='0', type=str, help='GPU device (number) to use; defaults to 0')
     parser.add_argument('--cpu', action='store_true', help='Whether to use CPU instead of GPU; this option overwrites the --gpu_device argument')
-    parser.add_argument('--results_path', default='../results', help='Path to save training and validation results (e.g. metrics, model weights)')
+    parser.add_argument('--results_path', default='results/', help='Path to save training and validation results (e.g. metrics, model weights)')
     parser.add_argument('--save_scores', action='store_true', help='Whether to save model scores during training and validation')
-    parser.add_argument('--scores_path', default='../scores', help='Path to save model scores during training and validation')
+    parser.add_argument('--scores_path', default='scores/', help='Path to save model scores during training and validation')
     parser.add_argument('--resume_training', action='store_true', help='Whether to resume training from a checkpoint')
     parser.add_argument('--checkpoint_path', help='Path to model\'s saved weights (model\'s checkpoint); used to resume training from a checkpoint')
     parser.add_argument('--num_epochs_to_val', default=10, help='Perform validation every --num_epochs_to_val epochs')
 
     args = parser.parse_args()
-
+    print(type(args.gpu_device))
     # if args.warmup_epochs == 0:
     #     if args.init_lr is not None:
     #         warnings.warn("Warning: warmup_epochs = 0, while init_lr > 0.\n Defaulting to init_lr = None.")
