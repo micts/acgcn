@@ -209,6 +209,61 @@ def inference(cfg):
     for label in AP_05:
         print(label + ': ', AP_05[label])
 
+if __main__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-ap', '--annot_path', default='../data/DALY/annotations/', help='Path to annotations folder')
+    parser.add_argument('-cp', '--config_path', required=True, help='Path to model\'s config file')
+    parser.add_argument('-mp', '--model_path', required=True, help='Path to model\'s saved weights (model checkpoint)')
+    parser.add_argument('-bs', '--batch_size', default=3, help='Batch size')
+    parser.add_argument('--gpu_device', default=0, type=int, help='GPU device (number) to use; defaults to 0')
+    parser.add_argument('--cpu', default=False, action='store_true' help='Whether to use CPU instead of GPU; this option overwrites the --gpu_device argument')
+    parser.add_argument('--save_scores', help='Whether to save model scores under /scores')
+    parser.add_argument('-s', '--split', default='test', help='Dataset split; possible values are \'training\', \'validation\', \'test\'')
+
+    # add other input arguments to bypass config
+
+    # results_path
+    # scores_path
+    # use_gpu
+    # annot_path
+    # test_batch_size
+
+
+
+        #parser = argparse.ArgumentParser()
+        #parser.add_argument('-mn', '--model_name', required=True, help='model name: \'baseline\' or \'gcn\'')
+        #parser.add_argument('-f', '--filename', required=True, help='model\'s filename under results/, e.g. 2020-03-15_20-12-17')
+        #parser.add_argument('-mi', '--model_instance', required=True, help='model\'s instance under results/filename/, e.g. epoch_300_1.158')
+        #parser.add_argument('-s', '--split', required=True, help='dataset split; possible values are \'training\', \'validation\', \'test\'')
+
+    args = parser.parse_args()
+
+    with open(os.path.join(args.config_path, 'config.pkl'), 'rb') as f:
+        cfg_dict = pickle.load(f)
+
+
+
+        model_name = args.model_name
+        filename = args.filename
+        model_instance = args.model_instance
+        split = args.split
+
+        cfg = config.Config(model_name, 0, 0, 'sum', False) # default config values
+
+        results_path = cfg.results_path
+        scores_path = cfg.scores_path
+        cfg = utils.overwrite_config(cfg, cfg_dict) # overwrite default config file
+        if model_name == 'baseline':
+            cfg.results_path = results_path
+            cfg.scores_path = scores_path
+        utils.print_config(cfg)
+
+
+
+    inference(cfg)
+
     # if save_scores:
     #     if not os.path.exists(cfg.scores_path):
     #         os.mkdir(cfg.scores_path)
