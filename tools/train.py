@@ -70,42 +70,8 @@ def load_checkpoint(model, optimizer, checkpoint_path):
 
 def prepare_training(cfg):
 
-    # if cfg.save_log:
-    #     if not os.path.exists(cfg.results_path):
-    #         os.mkdir(cfg.results_path)
-    #     if not os.path.exists(os.path.join(cfg.results_path, cfg.model_name)):
-    #         os.mkdir(os.path.join(cfg.results_path, cfg.model_name))
-    #     if cfg.load_checkpoint:
-    #         cfg.filename = 'checkpoint_' + cfg.checkpoint_path.split('/')[-2]
-    #     else:
-    #         cfg.filename = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
-    #     if not os.path.exists(os.path.join(cfg.results_path, cfg.model_name, cfg.filename)):
-    #         os.mkdir(os.path.join(cfg.results_path, cfg.model_name, cfg.filename))
-    #         utils.save_config(cfg)
-    #
-    # if cfg.save_scores:
-    #     if not os.path.exists(cfg.scores_path):
-    #         os.mkdir(cfg.scores_path)
-    #     if not os.path.exists(os.path.join(cfg.scores_path, cfg.model_name)):
-    #         os.mkdir(os.path.join(cfg.scores_path, cfg.model_name))
-    #     if not os.path.exists(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename)):
-    #         os.mkdir(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename))
-    #
-    # # if cfg.save_am:
-    # #     if not os.path.exists(cfg.am_path):
-    # #         os.mkdir(cfg.am_path)
-    # #     if not os.path.exists(os.path.join(cfg.am_path, cfg.filename)):
-    # #         os.mkdir(os.path.join(cfg.am_path, cfg.filename))
-    #
-    #
-    # if cfg.plot_grad_flow:
-    #     if not os.path.exists(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow')):
-    #         os.mkdir(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow'))
-
     if cfg.use_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = cfg.device_list
-
-    #utils.print_config(cfg)
 
     training_set, validation_set = dataset.return_dataset(cfg)
     datasets = {'train': training_set, 'val': validation_set}
@@ -151,8 +117,6 @@ def train(dataloaders, datasets, model, device, optimizer, cfg):
 
     train_start_time = time.time()
 
-    # if cfg.save_am:
-    #     am_dict = {}
     cross_entropy_loss = nn.CrossEntropyLoss()
     cross_entropy_loss = cross_entropy_loss.to(device)
     softmax = nn.Softmax(dim=1)
@@ -201,10 +165,6 @@ def train(dataloaders, datasets, model, device, optimizer, cfg):
 
                 num_actors_list = [num_boxes_per_frame[b][15].item() for b in range(imgs.shape[0])]
 
-                # num_actors_list = []
-                # for b in range(imgs.shape[0]):
-                #     num_actors_list.append(num_boxes_per_frame[b][15].item())
-
                 batch = [data.to(device=device) for data in [imgs, person_boxes]]
                 batch.append(num_boxes_per_frame)
                 batch.append(action_labels)
@@ -243,12 +203,6 @@ def train(dataloaders, datasets, model, device, optimizer, cfg):
                                                 video_names,
                                                 instances.tolist(),
                                                 center_frames.tolist())
-                # if cfg.save_am:
-                #     if 'MLKCbW7c9Wg.mp4' in video_names:
-                #         if torch.tensor([2]) in instances:
-                #             if torch.tensor([2161]) in center_frames:
-                #                 video_info = (video_names, instances.tolist(), center_frames.tolist())
-                #                 am_dict = utils.save_am(am_list, am_dict, video_info)
 
             if phase == 'train' and cfg.plot_grad_flow:
                 plt.savefig(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow', '_epoch_' + str(epoch).zfill(3) + '.png'), bbox_inches="tight")
@@ -282,56 +236,16 @@ def train(dataloaders, datasets, model, device, optimizer, cfg):
             #         print('{}: {:.4f}'.format(label, AP_05[label]))
 
             if cfg.save_scores and (phase == 'val') and (epoch % cfg.num_epochs_to_val == 0):
-                # if not os.path.exists(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename, datasets[phase].split)):
-                #     os.mkdir(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename, datasets[phase].split))
                 with open(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename, datasets[phase].split, 'scores_epoch_' + str(epoch).zfill(3)) + '.pkl', 'wb') as f:
                     pickle.dump(scores_dict, f)
 
-            # if cfg.save_am:
-            #     if epoch % cfg.num_epochs_to_val == 0:
-            #         if not os.path.exists(os.path.join(cfg.am_path, cfg.filename, datasets[phase].split)):
-            #             os.mkdir(os.path.join(cfg.am_path, cfg.filename, datasets[phase].split))
-            #         with open(os.path.join(cfg.am_path, cfg.filename, datasets[phase].split, 'am_epoch_' + str(epoch).zfill(3)) + '.pkl', 'wb') as f:
-            #             pickle.dump(am_dict, f)
-
         #save intermediate model and results
-
         if epoch % cfg.num_epochs_to_val == 0:
             results['model_state_dict'] = model.state_dict()
             results['optimizer_state_dict'] = optimizer.state_dict()
             torch.save(results, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_{}_{:.3f}.pth'.format(str(epoch).zfill(3), epoch_loss)))
         # always save?
         #torch.save(results, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_{}_{:.3f}.pth'.format(str(epoch).zfill(3), epoch_loss)))
-
-
-        # if cfg.save_log:
-        #     if epoch % cfg.num_epochs_to_val == 0:
-        #         if val_mAP_05 > 45:
-        #             torch.save({
-        #                 'epoch': epoch,
-        #                 'model_state_dict': model.state_dict(),
-        #                 'optimizer_state_dict': optimizer.state_dict(),
-        #                 'train_loss': train_loss,
-        #                 'train_acc': train_acc,
-        #                 'train_mAP_05': train_mAP_05,
-        #                 'train_mAP_03': train_mAP_03,
-        #                 'val_loss': val_loss,
-        #                 'val_acc': val_acc,
-        #                 'val_mAP_05': val_mAP_05,
-        #                 'val_mAP_03': val_mAP_03,
-        #                 }, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_' + str(epoch).zfill(3) + '_' + str(round(val_loss, 3)) + '.pth'))
-        #         else:
-        #             torch.save({
-        #                 'epoch': epoch,
-        #                 'train_loss': train_loss,
-        #                 'train_acc': train_acc,
-        #                 'train_mAP_05': train_mAP_05,
-        #                 'train_mAP_03': train_mAP_03,
-        #                 'val_loss': val_loss,
-        #                 'val_acc': val_acc,
-        #                 'val_mAP_05': val_mAP_05,
-        #                 'val_mAP_03': val_mAP_03,
-        #                 }, os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'epoch_' + str(epoch).zfill(3) + '_' + str(round(val_loss, 3)) + '.pth'))
 
         print()
 
@@ -379,45 +293,9 @@ if __name__ == '__main__':
     #         args.warmup_epochs = 0
     #         time.sleep(3)
 
-    # args.data_path,
-    # args.annot_path,
-    # args.model_name,
-    # args.num_layers,
-    # args.num_graphs,
-    # args.merge_function,
-    # args.zero_shot,
-    # args.total_epochs,
-    # args.warmup_epochs,
-    # args.init_lr,
-    # args.max_lr,
-    # args.min_lr,
-    # args.batch_size,
-    # args.gpu_device,
-    # args.cpu,
-    # args.results_path,
-    # args.save_scores,
-    # args.scores_path,
-    # args.num_epochs_to_val
-
     cfg = config.Config(args)
 
     utils.print_config(cfg)
-
-
-    # path = os.path.join(cfg.results_path, cfg.model_name, cfg.filename)
-    # if not os.path.exists(path):
-    #     os.mdkirs(path)
-    #     utils.save_config(cfg)
-    #
-    # if cfg.save_scores:
-    #     path = os.path.join(cfg.scores_path, cfg.model_name, cfg.filename)
-    #     if not os.path.exists(path):
-    #         os.mkdirs(path)
-    #
-    # if cfg.plot_grad_flow:
-    #     path = os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow')
-    #     if not os.path.exists(path):
-    #         os.mkdirs(path)
 
     dataloaders, datasets, model, device, optimizer = prepare_training(cfg)
     train(dataloaders, datasets, model, device, optimizer, cfg)
