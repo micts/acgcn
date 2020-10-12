@@ -10,7 +10,7 @@ class Config(object):
         self.num_person_boxes = 20 # max number of tracks in action instance
         self.num_in_frames = 32 # number of input frames
 
-        self.model_name = model_name # 'baseline' or 'gcn'
+        self.model_name = args.model_name # 'baseline' or 'gcn'
 
         self.data_path = args.data_path # 'data/DALY/frames/
         self.annot_path = args.annot_path
@@ -21,7 +21,7 @@ class Config(object):
         self.i3d_weights_path = 'models/'
         self.filename = ''
 
-        if cpu == False:
+        if args.cpu == False:
             self.use_gpu = True
             self.device_list = args.gpu_device
         else:
