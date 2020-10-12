@@ -3,9 +3,9 @@ import pickle
 import numpy as np
 
 def get_iou(a, b, epsilon=1e-16):
-    """ 
+    """
     Adapted from http://ronny.rest/tutorials/module/localization_001/iou/
-    
+
     Given two boxes `a` and `b` defined as a list of four numbers:
             [x1,y1,x2,y2]
         where:
@@ -45,9 +45,9 @@ def get_iou(a, b, epsilon=1e-16):
     return iou
 
 def get_tube_iou(a, b, epsilon=1e-16):
-    """ 
+    """
     Adapted from http://ronny.rest/tutorials/module/localization_001/iou/
-    
+
     Given two arrays `a` and `b` where each row contains a bounding
         box defined as a list of four numbers:
             [x1,y1,x2,y2]
@@ -92,24 +92,24 @@ def get_tube_iou(a, b, epsilon=1e-16):
     return iou
 
 def gen_labels_keyframes(save_path=None):
-        
+
     print('Generating labels for tracks...')
-    
+
     with open('../DALY/all_videos.pkl', 'rb') as f:
         all_videos = pickle.load(f)
-    
+
     with open('../DALY/daly1.1.0.pkl', 'rb') as f:
         annot = pickle.load(f, encoding='latin1')
-    
+
     with open('../DALY/humantubes_DALY.pkl', 'rb') as f:
         tubes = pickle.load(f, encoding='latin1')
-    
+
     with open('../DALY/validation_videos.pkl', 'rb') as f:
         validation_videos = pickle.load(f)
-    
+
     with open('../DALY/frames_size.pkl', 'rb') as f:
         frames_size = pickle.load(f)
-    
+
     action_dict = {}
     for idx, video in enumerate(all_videos):
         vid_annot = annot['annot'][video]['annot']
@@ -120,7 +120,7 @@ def gen_labels_keyframes(save_path=None):
             actions = ['TakingPhotosOrVideos', 'CleaningWindows', 'CleaningFloor']
         else:
             actions = [action for action in vid_annot]
-        action_dict[video] = actions       
+        action_dict[video] = actions
 
     iou_d = {}
     ious_ind = []
@@ -147,7 +147,7 @@ def gen_labels_keyframes(save_path=None):
         annot_data[split][video]['action_instances'] = {}
 
         actions = action_dict[video]
-        
+
         instance_idx = 0
         for action_idx, action in enumerate(actions):
             annot_instance_idx = 0
@@ -155,7 +155,7 @@ def gen_labels_keyframes(save_path=None):
                 if (instance['flags']['isReflection'] == True) or (instance['flags']['isAmbiguous'] == True):
                     annot_instance_idx += 1
                     continue
-                    
+
                 annot_data[split][video]['action_instances'][instance_idx] = {}
                 annot_data[split][video]['action_instances'][instance_idx]['frames'] = {}
                 annot_data[split][video]['action_instances'][instance_idx]['tubes'] = {}
@@ -164,7 +164,7 @@ def gen_labels_keyframes(save_path=None):
                 annot_data[split][video]['action_instances'][instance_idx]['tube_ious'] = []
                 annot_data[split][video]['action_instances'][instance_idx]['keyframes'] = {}
                 tubes_instance = tubes[0][video][instance_idx]
-                
+
                 start_frame_tubes = int(tubes_instance[0][0, 0]) # first frame of tube/instance
                 end_frame_tubes = int(tubes_instance[0][-1, 0]) # last frame of tube/instance
                 begin_time = vid_annot[action][annot_instance_idx]['beginTime']
@@ -173,22 +173,22 @@ def gen_labels_keyframes(save_path=None):
                 annot_data[split][video]['action_instances'][instance_idx]['tbound'] = (start_frame_tubes, end_frame_tubes)
                 annot_data[split][video]['action_instances'][instance_idx]['label_name'] = action
                 annot_data[split][video]['action_instances'][instance_idx]['label'] = utils.class2idx(action)
-                
+
                 annot_keylist = vid_annot[action][annot_instance_idx]['keyframes']
                 keyframes = []
                 for annot_keyframe in annot_keylist:
                     keyframes.append(annot_keyframe['frameNumber'])
                     assert (annot_keyframe['frameNumber'] >= start_frame_tubes) and (annot_keyframe['frameNumber'] <= end_frame_tubes)
                     annot_data[split][video]['action_instances'][instance_idx]['keyframes'][annot_keyframe['frameNumber']] = annot_keyframe['boundingBox'][0]
-                
+
                 for tube_idx, tube in enumerate(tubes_instance):
-                    annot_data[split][video]['action_instances'][instance_idx]['tubes'][tube_idx] = tube 
+                    annot_data[split][video]['action_instances'][instance_idx]['tubes'][tube_idx] = tube
                     for frame in tube:
                         frame_num = int(frame[0])
                         if frame_num not in annot_data[split][video]['action_instances'][instance_idx]['frames']:
                             annot_data[split][video]['action_instances'][instance_idx]['frames'][frame_num] = []
                         annot_data[split][video]['action_instances'][instance_idx]['frames'][frame_num].append(frame[1:5])
-                
+
                     tube_iou_class = [0, 'Background']
                     for action_idx2, action2 in enumerate(actions):
                         for instance2_idx, instance2 in enumerate(vid_annot[action2]):
@@ -218,10 +218,10 @@ def gen_labels_keyframes(save_path=None):
                     annot_data[split][video]['action_instances'][instance_idx]['tube_labels'].append(utils.class2idx(tube_iou_class[1]))
                     annot_data[split][video]['action_instances'][instance_idx]['tube_labelnames'].append(tube_iou_class[1])
                     annot_data[split][video]['action_instances'][instance_idx]['tube_ious'].append(tube_iou_class[0])
-                                                                    
+
                 instance_idx += 1
                 annot_instance_idx += 1
-    
+
     # annot_data_ = copy.deepcopy(annot_data)
     # splits = list(annot_data.keys())
     # for split in splits:
@@ -234,26 +234,26 @@ def gen_labels_keyframes(save_path=None):
     #                 annot_data_[split][video]['action_instances'][instance]['frames'][frame] = boxes
     #             labels = np.copy(np.hstack(annot_data[split][video]['action_instances'][instance]['tube_labels']))
     #             annot_data_[split][video]['action_instances'][instance]['tube_labels'] = labels
-    
+
     if save_path != None:
         print('Saving dictionary under', save_path)
         with open(os.path.join(save_path, 'annotated_data.pkl'), 'wb') as f:
             pickle.dump(annot_data, f)
         print('Saving finished.')
-        
+
     return(annot_data)
 
 
 def split_train_val(write_to_pkl=False):
-    
+
     """
     Construct a new training set and a validation set from the initial training set.
     A video is assigned to either the training set or the validation set.
     """
-    
+
     with open('/project/DALY/daly1.1.0.pkl', 'rb') as f:
         annot = pickle.load(f, encoding='latin1')
-    
+
     all_training_videos = {}
     for idx in range(1, 11):
         all_training_videos[idx2class(idx)] = []
@@ -263,9 +263,9 @@ def split_train_val(write_to_pkl=False):
             continue
         suggested_class = annot['annot'][video]['suggestedClass']
         all_training_videos[suggested_class].append(video)
-        
+
     i = 0
-    training_videos = []    
+    training_videos = []
     validation_videos = []
     np.random.seed(86723) # 17343
     for action_class in all_training_videos:
@@ -273,12 +273,12 @@ def split_train_val(write_to_pkl=False):
         n_class_videos = len(videos)
         assert n_class_videos == 31
         val_videos_idxs = np.random.choice(np.arange(31), size=10, replace=False) # size=11
-        for idx in range(31):        
+        for idx in range(31):
             if idx in val_videos_idxs:
                 validation_videos.append(videos[idx])
             else:
-                training_videos.append(videos[idx])            
-                
+                training_videos.append(videos[idx])
+
     if write_to_pkl:
         with open('../DALY/training_videos.pkl', 'wb') as f:
             pickle.dump(training_videos, f)
@@ -286,30 +286,30 @@ def split_train_val(write_to_pkl=False):
             pickle.dump(validation_videos, f)
         with open('../DALY/all_training_videos.pkl', 'wb') as f:
             pickle.dump(training_videos + validation_videos, f)
-                
+
     return(training_videos, validation_videos)
 
 def class2idx_map(classes_to_exclude=None):
     actions = ['Background',
-               'ApplyingMakeUpOnLips', 
-               'BrushingTeeth', 
-               'CleaningFloor', 
-               'CleaningWindows', 
-               'Drinking', 
-               'FoldingTextile', 
-               'Ironing', 
-               'Phoning', 
-               'PlayingHarmonica', 
+               'ApplyingMakeUpOnLips',
+               'BrushingTeeth',
+               'CleaningFloor',
+               'CleaningWindows',
+               'Drinking',
+               'FoldingTextile',
+               'Ironing',
+               'Phoning',
+               'PlayingHarmonica',
                'TakingPhotosOrVideos']
 
     if classes_to_exclude is not None:
         for class_name in classes_to_exclude:
             actions.remove(class_name)
-    
+
     class_map = {action:idx for idx, action in enumerate(actions)}
     return class_map
 
-def class2idx(class_map, class_name):    
+def class2idx(class_map, class_name):
     return class_map[class_name]
 
 def idx2class(class_map, class_index):
@@ -357,32 +357,36 @@ def save_config(cfg):
     with open(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'config.pkl'), 'wb') as f:
         pickle.dump(cfg.__dict__, f)
 
+def make_dirs(path):
+    if not os.path.exists(path):
+        os.mkdirs(path)
+
 def save_scores(scores, labels, num_actors_list, scores_dict, video_names, instances, center_frames):
-    
-    # Get the indices for each actor to index the arrays 'scores' and 'labels' 
+
+    # Get the indices for each actor to index the arrays 'scores' and 'labels'
     actor_idx = np.cumsum(num_actors_list)
     actor_idx = np.hstack((0, actor_idx))
-    
+
     # We can infer the batch size based on the length of 'num_actors_list'.
     # We want to split scores per mini-batch, since each mini-batch might
     # correspond to a different video, instance, and center frame.
-    batch_size = len(num_actors_list) 
+    batch_size = len(num_actors_list)
     for b in range(batch_size):
         video = video_names[b]
         instance = instances[b]
         center_frame = center_frames[b]
-        
+
         if video not in scores_dict:
             scores_dict[video] = {}
         if instance not in scores_dict[video]:
             scores_dict[video][instance] = {}
-            
-        # We sample center frames uniformly without replacement, 
-        # so in each epoch and for each phase ('train', 'val'), 
+
+        # We sample center frames uniformly without replacement,
+        # so in each epoch and for each phase ('train', 'val'),
         # a center frame should access scores_dict only once.
         # If a center frame exists already in scores_dict, raise an error.
         #assert center_frame not in scores_dict[video][instance]
-        
+
         # Index 'scores' and 'labels' based on actor indices (actor_idx) produced by cumsum.
         scores_dict[video][instance][center_frame] = {}
         scores_dict[video][instance][center_frame]['scores'] = scores[actor_idx[b]:actor_idx[b + 1], :]
@@ -390,16 +394,16 @@ def save_scores(scores, labels, num_actors_list, scores_dict, video_names, insta
     return scores_dict
 
 def get_obj_annotations(annotated_data, annot):
-                
+
     with open('../DALY/all_videos.pkl', 'rb') as f:
         all_videos = pickle.load(f)
-        
+
     with open('../DALY/daly1.1.0.pkl', 'rb') as f:
         annot = pickle.load(f, encoding='latin1')
-    
+
     with open('../DALY/validation_videos.pkl', 'rb') as f:
         validation_videos = pickle.load(f)
-        
+
     action_dict = {}
     for idx, video in enumerate(all_videos):
         vid_annot = annot['annot'][video]['annot']
@@ -410,7 +414,7 @@ def get_obj_annotations(annotated_data, annot):
             actions = ['TakingPhotosOrVideos', 'CleaningWindows', 'CleaningFloor']
         else:
             actions = [action for action in vid_annot]
-        action_dict[video] = actions       
+        action_dict[video] = actions
 
     obj_annotations = {}
     obj_annotations['training'] = {}
@@ -427,7 +431,7 @@ def get_obj_annotations(annotated_data, annot):
 
         video_id = video.split('.')[0]
         vid_annot = annot['annot'][video]['annot']
-            
+
         obj_annotations[split][video] = {}
         obj_annotations[split][video]['(width, height)'] = annotated_data[split][video]['(width, height)']
         obj_annotations[split][video]['action_instances'] = {}
@@ -446,20 +450,20 @@ def get_obj_annotations(annotated_data, annot):
                 if is_object == False:
                     instance_idx += 1
                     continue
-                                
+
                 obj_annotations[split][video]['action_instances'][instance_idx] = {}
                 for keyframe in instance['keyframes']:
                     if len(keyframe['objects']) > 0:
-                        keyframe_num = keyframe['frameNumber']            
+                        keyframe_num = keyframe['frameNumber']
                         obj_annotations[split][video]['action_instances'][instance_idx][keyframe_num] = keyframe['objects']
-                    
+
                 instance_idx += 1
     return obj_annotations
 
 def save_am(am_list, am_dict, video_info):
 
     video_names, instances, center_frames = video_info[0], video_info[1], video_info[2]
-    
+
     for video_name in video_names:
         if video_name not in am_dict:
             am_dict[video_name] = {}
@@ -469,7 +473,7 @@ def save_am(am_list, am_dict, video_info):
     for idx, center_frame in enumerate(center_frames):
         if center_frame not in am_dict[video_names[idx]][instances[idx]]:
             am_dict[video_names[idx]][instances[idx]][center_frame] = {}
-    
+
     for layer in range(len(am_list)):
         for graph in range(len(am_list[layer])):
             for idx, adj_matrix in enumerate(am_list[layer][graph]):
