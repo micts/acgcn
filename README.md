@@ -179,6 +179,8 @@ Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm
 
 ### Inference<a name="inference"/>      
 
+Make sure to replace the placeholder values inside the following scripts with the model's information to be used for inference. Trained models for inference will be made available as soon as possible.
+
 Inference on the test set using a GCN model:
 
 ```
