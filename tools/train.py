@@ -281,18 +281,6 @@ if __name__ == '__main__':
     parser.add_argument('--num_epochs_to_val', default=10, help='Perform validation every --num_epochs_to_val epochs')
 
     args = parser.parse_args()
-    print(type(args.gpu_device))
-    # if args.warmup_epochs == 0:
-    #     if args.init_lr is not None:
-    #         warnings.warn("Warning: warmup_epochs = 0, while init_lr > 0.\n Defaulting to init_lr = None.")
-    #         args.init_lr = None
-    #         time.sleep(3)
-    # if args.init_lr is None:
-    #     if args.warmup_epochs > 0:
-    #         warnings.warn("Warning: init_lr = None, while warmup_epochs > 0.\n Defaulting to warmup_epochs = 0.")
-    #         args.warmup_epochs = 0
-    #         time.sleep(3)
-
     cfg = config.Config(args)
 
     utils.print_config(cfg)
