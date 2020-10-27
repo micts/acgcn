@@ -24,7 +24,7 @@ parser.add_argument('-bs', '--batch_size', type=int, default=3, help='Batch size
 parser.add_argument('-zs', '--zero_shot', action='store_true', default=False, help='Exclude certain classes during training; refer to config.py to modify the classes to be exluded')
 
 # file to config
-#
+# test this change
 
 args = parser.parse_args()
 
