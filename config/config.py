@@ -1,5 +1,9 @@
 from utils import utils
 
+class GetConfig:
+    def __init__(self, **x):
+        self.__dict__.update(x)
+
 class Config(object):
 
     def __init__(self, args):
@@ -97,3 +101,4 @@ class Config(object):
         self.resume_training = args.resume_training # Load weights from checkpoint to resume training
         if self.resume_training:
             self.checkpoint_path = args.checkpoint_path
+
