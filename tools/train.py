@@ -111,6 +111,9 @@ def prepare_training(cfg):
     if cfg.plot_grad_flow:
         utils.make_dirs(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow'))
 
+    utils.save_config(cfg)
+    utils.print_config(cfg)
+
     return dataloaders, datasets, model, device, optimizer
 
 def train(dataloaders, datasets, model, device, optimizer, cfg):
@@ -282,8 +285,6 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     cfg = config.Config(args)
-
-    utils.print_config(cfg)
 
     dataloaders, datasets, model, device, optimizer = prepare_training(cfg)
     train(dataloaders, datasets, model, device, optimizer, cfg)
