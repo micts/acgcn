@@ -1,5 +1,6 @@
 from __future__ import print_function, division
 import os
+import sys
 import argparse
 import pickle
 import numpy as np
@@ -9,20 +10,15 @@ import torch
 import torch.nn as nn
 from torch.utils import data
 
-import daly
-import dataset
-import config
-from models import baseline_model
-from models import gcn_model
-import utils
-import eval_utils
+sys.path.append('.')
 
-def extract_features(dataloader, dataset, model, device, model_instance, annot_data, cfg):
+from config import config
+from dataset import dataset, daly
+from models import gcn_model, baseline_model
+from utils import utils, eval_utils
+
+def extract_features(dataloader, dataset, model, device, annot_data, annot):
     
-    with open(os.path.join(cfg.annot_path, 'daly1.1.0.pkl'), 'rb') as f:
-        annot = pickle.load(f, encoding='latin1')
-    
-    start_time = time.time()
     model.eval()
     
     obj_annotations = utils.get_obj_annotations(annot_data, annot)
@@ -49,10 +45,8 @@ def extract_features(dataloader, dataset, model, device, model_instance, annot_d
             continue
         if keyframe not in obj_annotations[dataset.split][video_name]['action_instances'][instance]:
             continue
-        
-        num_actors_list = []
-        for b in range(imgs.shape[0]):
-            num_actors_list.append(num_boxes_per_frame[b][15].item())
+       
+        num_actors_list = [num_boxes_per_frame[b][15].item() for b in range(imgs.shape[0])]
         
         batch = [data.to(device=device) for data in [imgs, person_boxes]]
         batch.append(num_boxes_per_frame)
@@ -90,61 +84,58 @@ def extract_features(dataloader, dataset, model, device, model_instance, annot_d
                 obj_id = int(vid_annot['action_instances'][instance][keyframe][box_idx][4])
                 obj_name = annot['objectList'][obj_id]
                 features_dict[graph_num].append([obj_features, obj_name])
-        
-    if not os.path.exists(cfg.features_path):
-        os.mkdir(cfg.features_path)
-    if not os.path.exists(os.path.join(cfg.features_path, cfg.filename)):
-        os.mkdir(os.path.join(cfg.features_path, cfg.filename))
-    if not os.path.exists(os.path.join(cfg.features_path, cfg.filename, dataset.split)):
-        os.mkdir(os.path.join(cfg.features_path, cfg.filename, dataset.split))
-    with open(os.path.join(cfg.features_path, cfg.filename, dataset.split, 'features_' + model_instance.rsplit('_', 1)[0] + '.pkl'), 'wb') as f:
-        pickle.dump(features_dict, f)    
-            
-    end_time = time.time() - start_time
-    print('Completed in {:.0f}m {:.0f}s'.format(end_time // 60, end_time % 60))
+    
+    return features_dict
     
 if __name__ == '__main__':
-    
+   
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--filename', required=True, help='model\'s filename under results/, e.g. 2020-03-15_20-12-17')
-    parser.add_argument('-mi', '--model_instance', required=True, help='model\'s instance under results/filename/, e.g. epoch_300_1.158')
-    parser.add_argument('-s', '--split', required=True, help='dataset split; possible values are \'training\', \'validation\', \'test\'')
 
-    args = parser.parse_args()
+    parser.add_argument('--annot_path', default='../data/DALY/annotations/', help='Path to annotations folder')
+    parser.add_argument('--config_path', required=True, help='Path to model\'s config file')
+    parser.add_argument('--model_path', required=True, help='Path to model\'s saved weights (model checkpoint)')
+    parser.add_argument('--features_path', default='../features/', help='Path to save actor and object features')
+    parser.add_argument('--gpu_device', type=str, default=0, help='GPU device (number) to use; defaults to 0')
+    parser.add_argument('--cpu', action='store_true', help='Whether to use CPU instead of GPU; this option overwrites the --gpu_device argument')
+    parser.add_argument('--split', default='test', help='Dataset split; possible values are \'training\', \'validation\', \'test\'')
 
-    model_name = 'gcn'
-    filename = args.filename
-    model_instance = args.model_instance
-    split = args.split
+    args = parser.parse_args() 
 
-    cfg = config.Config(model_name, 0, 0, 'sum', False) # default config values
-    with open(os.path.join(cfg.results_path, model_name, filename, 'config.pkl'), 'rb') as f:
+    with open(os.path.join(args.config_path, 'config.pkl'), 'rb') as f:
         cfg_dict = pickle.load(f)
+    if 'merge_function' not in cfg_dict:
+        cfg_dict['merge_function'] = 'concat'
 
-    cfg = utils.overwrite_config(cfg, cfg_dict) # overwrite default config file
+    cfg = config.GetConfig(**cfg_dict)
     utils.print_config(cfg)
 
-    if cfg.use_gpu:
-        os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    if args.cpu == False:
+        use_gpu = True
+    else:
+        use_gpu = False
 
-    model_path = os.path.join(cfg.results_path, model_name, filename, model_instance)
-    checkpoint = torch.load(model_path)
+    if use_gpu:
+        os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_device
+
+    checkpoint = torch.load(args.model_path)
     model_state_dict = checkpoint['model_state_dict']
+
+    annot_data = daly.load_tracks(load_path=args.annot_path)
+    with open(os.path.join(args.annot_path, 'daly1.1.0.pkl'), 'rb') as f:
+        annot = pickle.load(f, encoding='latin1')
+
+
+    frames = daly.get_frames(annot_data, cfg, split=args.split, on_keyframes=False)
+    dataset = daly.DALYDataset(annot_data,
+                               frames,
+                               cfg,
+                               split=args.split)
     
-    annot_data = daly.gen_labels_keyframes(label_tracks=False, load_path=cfg.annot_path)
+    dataloader = data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=4)
 
-    test_frames = daly.get_frames(annot_data, cfg, split=split, on_keyframes=True)
-    test_set = daly.DALYDataset(annot_data, 
-                                test_frames,
-                                cfg,
-                                split=split)
+    print('\nExtracting actor features and object features using model {}...'.format(args.model_path))
 
-    print()
-    print('Extracting actor features and object features using model', os.path.join(cfg.model_name, filename, model_instance))
-
-    test_loader = data.DataLoader(test_set, batch_size=1, shuffle=False, num_workers=4)
-
-    if cfg.use_gpu and torch.cuda.is_available():
+    if use_gpu and torch.cuda.is_available():
         device = torch.device('cuda')
     else:
         device = torch.device('cpu')
@@ -155,12 +146,18 @@ if __name__ == '__main__':
     elif cfg.model_name == 'gcn':
         model = gcn_model.GCNNet(cfg)
         model.load_state_dict(model_state_dict)
-    else:
-        assert(False), 'Variable model_name should be either \'baseline\' or 2 \'gcn\'.'
 
+    start_time = time.time()
     model = model.to(device=device)
-    extract_features(test_loader, test_set, model, device, model_instance, annot_data, cfg)
+    features_dict = extract_features(dataloader, dataset, model, device, annot_data, annot)
 
+    model_features_path = os.path.join(args.features_path, cfg.model_name, cfg.filename, args.split)
+    utils.make_dirs(model_features_path)
+    epoch_nr = args.model_path.rsplit('/')[-1].rsplit('_', 1)[0]
+    with open(os.path.join(model_features_path, 'features_{}.pkl'.format(epoch_nr)), 'wb') as f:
+        pickle.dump(features_dict, f)
 
+    end_time = time.time() - start_time
+    print('Completed in {:.0f}m {:.0f}s'.format(end_time // 60, end_time % 60))
 
 
