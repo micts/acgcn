@@ -9,12 +9,12 @@ import os
 import copy
 
 def load_tracks(load_path='../DALY/'):
-    print('Loading labeled tracks...')
+#    print('Loading labeled tracks...')
             
     with open(os.path.join(load_path, 'annotated_data.pkl'), 'rb') as f:
         annot_data = pickle.load(f)
 
-    print('Finished.')
+    #print('Finished.')
     return annot_data
       
 def is_next_video(video_labels, classes_to_exclude, split):
@@ -29,25 +29,15 @@ def is_next_video(video_labels, classes_to_exclude, split):
                 next_video = True
     return next_video
 
-def get_frames(annot_data, cfg, split='training', on_keyframes=False):
+def get_frames(annot_path, annot_data, cfg, split='training', on_keyframes=False):
     
     if cfg.zero_shot:
-        with open(os.path.join(cfg.annot_path, 'daly1.1.0.pkl'), 'rb') as f:
+        with open(os.path.join(annot_path, 'daly1.1.0.pkl'), 'rb') as f:
             annot = pickle.load(f, encoding='latin1')
-    
-    ######################################
-    available_videos = os.listdir(cfg.data_path)
-    ######################################
-    print(len(available_videos))
+ 
     if split == 'training':
         frames = []
-        for i, video in enumerate(annot_data[split]):
-            ########################################
-            if video not in available_videos:
-                continue
-            #if video == 'Jy8JurvYlH4.mp4':
-            #    continue
-            ########################################
+        for i, video in enumerate(annot_data[split]): 
             if cfg.zero_shot:
                 video_labels = list(annot['annot'][video]['annot'].keys())
                 next_video = is_next_video(video_labels, cfg.classes_to_exclude, split)
@@ -74,13 +64,9 @@ def get_frames(annot_data, cfg, split='training', on_keyframes=False):
         else: 
             if split == 'validation' or split == 'test':
                 np.random.seed(1001) # always get the same samples across different models
-                num_frames = 10 # 10
+                num_frames = 10
                 frames = []
-                for video in annot_data[split]:
-                    ########################################
-                    if video not in available_videos:
-                        continue
-                    ########################################
+                for video in annot_data[split]: 
                     if cfg.zero_shot:
                         video_labels = list(annot['annot'][video]['annot'].keys())
                         next_video = is_next_video(video_labels, cfg.classes_to_exclude, split)
@@ -101,6 +87,7 @@ def get_frames(annot_data, cfg, split='training', on_keyframes=False):
 class DALYDataset(data.Dataset):
     
     def __init__(self, 
+                 data_path,
                  annot_data, 
                  frames, 
                  cfg,
@@ -109,7 +96,7 @@ class DALYDataset(data.Dataset):
         self.cfg = cfg
         self.annot_data = annot_data
         self.frames = frames
-        self.data_path = cfg.data_path
+        self.data_path = data_path
         self.img_size = cfg.img_size
         self.out_feature_size = cfg.out_feature_size
         self.num_person_boxes = cfg.num_person_boxes
