@@ -10,8 +10,6 @@ import torch
 import torch.nn as nn
 from torch.utils import data
 
-sys.path.append('.')
-
 from config import config
 from dataset import dataset, daly
 from models import gcn_model, baseline_model
