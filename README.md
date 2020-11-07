@@ -17,8 +17,8 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 
 ## Table of Contents  
 * [Requirements](#requirements)  
-* [Installation](#installation)
 * [Getting Started](#gettingstarted)
+* [Installation](#installation)
 * [Data Preparation](#datapreparation)
   * [Download Videos](#downloadvideos)
   * [Extract Frames](#extractframes)
@@ -44,7 +44,7 @@ Optionally, for visualizations:
 `scikit-learn >= 0.22.2`     
 
 
-## Installation<a name="installation"/>      
+## Getting Started<a name="gettingstarted"/>      
 
 Create a conda environment:
 
@@ -53,20 +53,11 @@ conda create -n myenv python=3.7
 source activate myenv
 ```
 
-Install requirements:
+For older versions of `conda`, you might need to use `conda` instead of `source`:
 
 ```
-conda install --file requirements.txt
+conda activate myenv
 ```
-
-Finally, install PyTorch and torchvision:
-
-```
-conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
-```
-
-
-## Getting Started<a name="gettingstarted"/>      
 
 Clone this repository:
 
@@ -84,6 +75,20 @@ Finally, apply the changes:
 
 ```
 source ~/.bashrc
+```
+
+## Installation<a name="installation"/>      
+
+Install requirements:
+
+```
+conda install --file requirements.txt
+```
+
+Finally, install PyTorch and torchvision:
+
+```
+conda install pytorch==1.2.0 torchvision==0.4.0 cudatoolkit=9.2 -c pytorch
 ```
 
 ## Data Preperation<a name="datapreparation"/>          
