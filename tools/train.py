@@ -17,8 +17,6 @@ from torch.optim import lr_scheduler
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import LambdaLR
 
-sys.path.append('.')
-
 from config import config
 from dataset import dataset
 from models import gcn_model, baseline_model
@@ -68,18 +66,10 @@ def load_checkpoint(model, optimizer, checkpoint_path):
     print()
     return model, optimizer, start_epoch
 
-def prepare_training(cfg):
-
+def prepare_training(cfg, args):
+    
     if cfg.use_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = cfg.device_list
-
-    training_set, validation_set = dataset.return_dataset(cfg)
-    datasets = {'train': training_set, 'val': validation_set}
-
-    training_loader = data.DataLoader(training_set, batch_size=cfg.training_batch_size, shuffle=True, num_workers=4, worker_init_fn=worker_init_fn)
-    validation_loader = data.DataLoader(validation_set, batch_size=cfg.validation_batch_size, shuffle=False, num_workers=4)
-
-    dataloaders = {'train': training_loader, 'val': validation_loader}
 
     if cfg.use_gpu and torch.cuda.is_available():
         device = torch.device('cuda')
@@ -94,7 +84,6 @@ def prepare_training(cfg):
         assert(False), 'Variable model_name should be either \'baseline\' or 2 \'gcn\'.'
 
     model = model.to(device=device)
-
     optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()), lr=1, momentum=cfg.momentum, weight_decay=cfg.weight_decay)
 
     if cfg.resume_training:
@@ -103,17 +92,29 @@ def prepare_training(cfg):
         cfg.start_epoch = start_epoch
     else:
         cfg.filename = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
-
+    
     utils.make_dirs(os.path.join(cfg.results_path, cfg.model_name, cfg.filename))
+    utils.save_config(cfg)
+    utils.print_config(cfg)    
+
     if cfg.save_scores:
         utils.make_dirs(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename, datasets['train'].split))
         utils.make_dirs(os.path.join(cfg.scores_path, cfg.model_name, cfg.filename, datasets['val'].split))
     if cfg.plot_grad_flow:
         utils.make_dirs(os.path.join(cfg.results_path, cfg.model_name, cfg.filename, 'grad_flow'))
+  
+    #utils.save_config(cfg)
+    #utils.print_config(cfg)
+ 
+    training_set = dataset.return_dataset(args.data_path, args.annot_path, cfg, 'training')
+    validation_set = dataset.return_dataset(args.data_path, args.annot_path, cfg, 'validation')
+    datasets = {'train': training_set, 'val': validation_set}
 
-    utils.save_config(cfg)
-    utils.print_config(cfg)
+    training_loader = data.DataLoader(training_set, batch_size=cfg.training_batch_size, shuffle=True, num_workers=4, worker_init_fn=worker_init_fn)
+    validation_loader = data.DataLoader(validation_set, batch_size=cfg.validation_batch_size, shuffle=False, num_workers=4)
 
+    dataloaders = {'train': training_loader, 'val': validation_loader}
+ 
     return dataloaders, datasets, model, device, optimizer
 
 def train(dataloaders, datasets, model, device, optimizer, cfg):
@@ -284,7 +285,8 @@ if __name__ == '__main__':
     parser.add_argument('--num_epochs_to_val', default=10, help='Perform validation every --num_epochs_to_val epochs')
 
     args = parser.parse_args()
+    
     cfg = config.Config(args)
 
-    dataloaders, datasets, model, device, optimizer = prepare_training(cfg)
+    dataloaders, datasets, model, device, optimizer = prepare_training(cfg, args)
     train(dataloaders, datasets, model, device, optimizer, cfg)
