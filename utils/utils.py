@@ -345,7 +345,7 @@ def print_config(cfg):
                         print(class_name + ': ', str(class_idx), sep='')
         else:
             print(k, ': ', v, sep='')
-    print('')
+    print('\n')
 
 def overwrite_config(cfg, cfg_dict):
     for k in cfg.__dict__:

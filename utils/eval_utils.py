@@ -149,11 +149,6 @@ def videomAP(scores, annot_data, split, cfg, iou_threshold=0.5):
         class_pred_tubes = pred_tubes[class_label]
         class_gt_tubes = gt_tubes[class_label]
 
-        ####################################
-        if len(class_gt_tubes) == 0:
-            continue
-        ####################################
-
         pr = np.empty((len(class_pred_tubes) + 1, 2), dtype=np.float32)
         pr[0,0] = 1.0
         pr[0,1] = 0.0
