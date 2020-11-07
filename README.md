@@ -131,6 +131,9 @@ cd ..
 rm -rf data/DALY/DALY_frames data/DALY/DALY_videos
 ```
 
+### Download Human Tubes and Annotations
+
+Download all required human tubes and annotations as a .pkl file (`annotated_data.pkl`) using the following [link](https://drive.google.com/file/d/1taQvy56vEuCAT2-4UeBFfhxsZEw7MXlG/view?usp=sharing). Place `annotated_data.pkl` in `data/DALY/annotations`. 
 
 ### File Structure<a name="filestructure"/>    
 
@@ -141,6 +144,7 @@ DALY/
 |_ annotations
 |  |_ all_training_videos.pkl
 |  |_ all_videos.pkl
+|  |_ annotated_data.pkl
 |  |_ daly1.1.0.pkl
 |  |_ frames_size.pkl
 |  |_ training_videos.pkl
