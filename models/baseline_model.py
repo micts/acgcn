@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 from models import pytorch_i3d
@@ -19,7 +20,7 @@ class BaseNet(nn.Module):
                 
         backbone = pytorch_i3d.InceptionI3d(final_endpoint='Logits') # Set to 'Logits' to build mixed_5b and mixed_5c layers
         backbone.build()
-        pretrained_dict = torch.load('/project/code/rgb_imagenet.pt') # Load weights pre-trained on Imagenet + Kinetics
+        pretrained_dict = torch.load(os.path.join(cfg.i3d_weights_path, 'rgb_imagenet.pt')) # Load weights pre-trained on Imagenet + Kinetics
 
         # 1. filter out unnecessary keys
         backbone_weights = {k: v for k, v in pretrained_dict.items() if k in backbone.state_dict()}
