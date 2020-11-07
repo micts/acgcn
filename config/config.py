@@ -35,8 +35,8 @@ class Config(object):
 
         self.label_tracks = False # whether to compute track annotations (True), or load them instead (False)
 
-        self.training_batch_size = args.batch_size # 3
-        self.validation_batch_size = args.batch_size # 3
+        self.training_batch_size = args.batch_size
+        self.validation_batch_size = args.batch_size
 
         self.momentum = 0.9
         self.weight_decay = 0
