@@ -10,8 +10,6 @@ import torch
 import torch.nn as nn
 from torch.utils import data
 
-sys.path.append('.')
-
 from config import config
 from dataset import dataset, daly
 from models import gcn_model, baseline_model
@@ -31,16 +29,18 @@ def prepare_inference(cfg, args):
     model_state_dict = checkpoint['model_state_dict']
     
     annot_data = daly.load_tracks(load_path=args.annot_path)
-
-    frames = daly.get_frames(annot_data, cfg, split=args.split, on_keyframes=False)
-    dataset = daly.DALYDataset(annot_data,
-                               frames,
-                               cfg,
-                               split=args.split)
+    
+    test_set = dataset.return_dataset(args.data_path, args.annot_path, cfg, split=args.split)
+#    frames = daly.get_frames(args.annot_path, annot_data, cfg, split=args.split, on_keyframes=False)
+#    dataset = daly.DALYDataset(args.data_path,
+#                               annot_data,
+#                               frames,
+#                               cfg,
+#                               split=args.split)
 
     print("\nPerforming inference using model {}...".format(args.model_path))
 
-    dataloader = data.DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=4)
+    dataloader = data.DataLoader(test_set, batch_size=args.batch_size, shuffle=False, num_workers=4)
 
     if use_gpu and torch.cuda.is_available():
         device = torch.device('cuda')
@@ -56,9 +56,9 @@ def prepare_inference(cfg, args):
 
     model = model.to(device=device)
     
-    return dataloader, dataset, model, device
+    return dataloader, test_set, model, device
 
-def inference(dataloader, dataset, model, device, cfg):
+def inference(dataloader, test_set, model, device, cfg):
 
     inference_start_time = time.time()
     cross_entropy_loss = torch.nn.CrossEntropyLoss()
@@ -114,8 +114,8 @@ def inference(dataloader, dataset, model, device, cfg):
 
     loss = running_loss / split_size
     acc = running_corrects.double() / split_size
-    mAP_05, AP_05 = eval_utils.videomAP(scores_dict, dataset.annot_data, dataset.split, cfg, iou_threshold=0.5)
-    mAP_03, AP_03 = eval_utils.videomAP(scores_dict, dataset.annot_data, dataset.split, cfg, iou_threshold=0.3)
+    mAP_05, AP_05 = eval_utils.videomAP(scores_dict, test_set.annot_data, test_set.split, cfg, iou_threshold=0.5)
+    mAP_03, AP_03 = eval_utils.videomAP(scores_dict, test_set.annot_data, test_set.split, cfg, iou_threshold=0.3)
 
     inference_time = time.time() - inference_start_time
     print('Inference complete in {:.0f}m {:.0f}s'.format(inference_time // 60, inference_time % 60))
@@ -129,6 +129,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
 
+    parser.add_argument('--data_path', default='../data/DALY/frames', help='Path to dataset folder')
     parser.add_argument('--annot_path', default='../data/DALY/annotations/', help='Path to annotations folder')
     parser.add_argument('--config_path', required=True, help='Path to model\'s config file')
     parser.add_argument('--model_path', required=True, help='Path to model\'s saved weights (model checkpoint)')
@@ -144,10 +145,21 @@ if __name__ == '__main__':
         cfg_dict = pickle.load(f)
     if 'merge_function' not in cfg_dict:
         cfg_dict['merge_function'] = 'concat'
-        
+    if 'zero_shot' not in cfg_dict:
+        cfg_dict['zero_shot'] = False
+        cfg_dict['classes_to_exclude'] = None
+    if 'num_features_mixed5c' not in cfg_dict:
+        cfg_dict['num_features_mixed5c'] = 1024
+    #if 'i3d_weights_path' not in cfg_dict:
+    #    cfg_dict['i3d_weights_path'] = 'models/'
+    cfg_dict['i3d_weights_path'] = 'models/'
+    if 'class_map' not in cfg_dict:
+        cfg_dict['class_map'] = utils.class2idx_map(cfg_dict['classes_to_exclude'])    
+
     cfg = config.GetConfig(**cfg_dict)
+    
     utils.print_config(cfg)
 
-    dataloader, dataset, model, device = prepare_inference(cfg, args)
-    inference(dataloader, dataset, model, device, cfg)
+    dataloader, test_set, model, device = prepare_inference(cfg, args)
+    inference(dataloader, test_set, model, device, cfg)
 
