@@ -27,6 +27,7 @@ acgcn -- Actor-Context/Centric Graph Convolutional Networks.
 * [How to Use](#howtouse)
   * [Training](#training)
   * [Inference](#inference)
+  * [Results](#results)  
 * [Acknowledgments](#acknowledgments)
 
 
@@ -188,7 +189,11 @@ Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm
 
 ### Inference<a name="inference"/>      
 
-Make sure to replace the placeholder values inside the following scripts with the model's information to be used for inference. Trained models for inference will be made available as soon as possible.
+Make sure to replace the values inside the following scripts with the model's information (model id, path to model weights, etc.), using either a model you trained, or using one of the provide trained models (see)
+
+
+
+to be used for inference.  
 
 Inference on the test set using a GCN model:
 
@@ -208,9 +213,29 @@ Both commands above run `inference.py`. For help and a description of input argu
 python tools/inference.py -h
 ```
 
+### Results<a name="results"/>     
 
+We provide trained models (model weights and config file) for GCN and Baseline. There are 5 models for GCN and Baseline respectively, using the same hyperparameters, but with different initialized seeds. Models and results correspond to those reported in the paper. Average Test Video-mAP (<span>&#177;</span> std) across the five repetitions is 61.82 (<span>&#177;</span> 0.51) for GCN and 59.58 (<span>&#177;</span> 0.22) for Baseline.
 
+#### GCN
 
+| Model ID | Num Layers | Num Graphs | Merge Function | Test Video-mAP | Model and Config |
+| :-------------: | :-------------: | :-------------: | :-------------: | :-------------: | :-------------: |
+| 2020-03-22_12-50-27 | 2 | 2 | Concat | 62.73 | [Weights](https://drive.google.com/uc?export=download&id=1zqnuEfwsPDV-04K7XRL5zi-JH9fKFO1w), [Config](https://drive.google.com/uc?export=download&id=1cg0ITYgpOiN7EImDbRHRqmYt3xBw7zjJ) |
+| 2020-03-24_15-15-49 | 2 | 2 | Concat | 61.14 | [Weights](https://drive.google.com/uc?export=download&id=1VMcM3Ve1-W_PnJTHFk92WLFtb1ZrnAwJ), [Config](https://drive.google.com/uc?export=download&id=1fC2AXMlBC5T1-rfFVhsI3Il9ssaa3DWQ) |
+| 2020-03-24_15-13-25 | 2 | 2 | Concat | 61.82 | [Weights](https://drive.google.com/uc?export=download&id=1chCEzdNHeQwZjqSFZX9r65uvxnB1q2fe), [Config](https://drive.google.com/uc?export=download&id=1Ir70MIIrKIigHuHvxvE_egcXdguOWZky) |
+| 2020-03-25_23-56-26 | 2 | 2 | Concat | 61.8 | [Weights](https://drive.google.com/uc?export=download&id=1Id-PmuK_3D5rBB5rlQREjbLWqVXpId89), [Config](https://drive.google.com/uc?export=download&id=1NrgHqFfmMlZ0E-lukIZTRaHm2n6TgkTJ) |
+| 2020-03-26_16-04-26 | 2 | 2 | Concat | 61.64 | [Weights](https://drive.google.com/uc?export=download&id=1vdrqNWG5F53vRPwXbZkcf57TSLLYoPfu), [Config](https://drive.google.com/uc?export=download&id=1dlJH2Ji1Itan0_JeVkyRn8UZ0osI6TSw) |
+
+#### Baseline
+
+ Model ID | Test Video-mAP | Model and Config |
+| :-------------: | :-------------: | :-------------: |
+| 2020-03-07_21-32-26 | 59.54 | [Weights](https://drive.google.com/uc?export=download&id=1XKPnvH3BgOiRH7OV2fIBJGaEsq9J5NKo), [Config](https://drive.google.com/uc?export=download&id=1mTRdwQ1zUiN4_iOfNtxw8w8jHDjOv2-H) |
+| 2020-03-08_17-09-39 | 59.17 | [Weights](https://drive.google.com/uc?export=download&id=1D9DyOp9ZiWEILICH6Fq84PQqKMMvLNy8), [Config](https://drive.google.com/uc?export=download&id=1RpyvbTEzt9q6holM7eXDu9VWoPEHmz8V) |
+| 2020-03-13_03-46-05 | 59.79 | [Weights](https://drive.google.com/uc?export=download&id=1Sj_Sv8Frq43iMyh3keC-Kbfglk7ES4Lr), [Config](https://drive.google.com/uc?export=download&id=1sb9ZP14WnbCDyNa26bwUtrMbI4sRXSDQ) |
+| 2020-03-07_20-22-15 | 59.77 | [Weights](https://drive.google.com/uc?export=download&id=1gLAPcrAzeT71QkZgvFfDMWMD7nI_xfHd), [Config](https://drive.google.com/uc?export=download&id=1VptvP67cRXd7L0c_JsOmc6AqxsGLVWxe) |
+| 2020-03-08_07-39-52 | 59.67 | [Weights](https://drive.google.com/uc?export=download&id=15PIn1Mh6O-1f_ImGDJKrAZJ1hVt9dOUg), [Config](https://drive.google.com/uc?export=download&id=1DxhySMut0bFdDBe5vhl981BCHRnmhmTN) |
 
 
 ## Acknowledgments<a name="acknowledgments"/>    
