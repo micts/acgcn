@@ -1,1 +1,1 @@
-python inference.py --model_name gcn --filename yyyy-mm-dd_HH-MM-SS --model_instance epoch_xxx_z.zzz.pth --split test  
+python tools/inference.py --data_path data/DALY/frames --annot_path data/DALY/annotations --config_path path/to/config/file --model_path /path/to/model/weights --batch_size 3 --gpu_device 0 --split test
