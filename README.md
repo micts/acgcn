@@ -189,7 +189,7 @@ Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm
 
 ### Inference<a name="inference"/>      
 
-Make sure to replace the values inside the following scripts with the model's information (model id, path to model weights, etc.), using either a model you trained, or using one of the provide trained models (see)
+Make sure to replace the values inside the following scripts with the model's information (model id, path to model weights, path to config file, etc.) to be used for inference. Use either a model you trained (model weights and config files are located in `results/`), or use one of the trained models already provided (see [Results](#results)).
 
 
 
@@ -215,7 +215,7 @@ python tools/inference.py -h
 
 ### Results<a name="results"/>     
 
-We provide trained models (model weights and config file) for GCN and Baseline. There are 5 models for GCN and Baseline respectively, using the same hyperparameters, but with different initialized seeds. Models and results correspond to those reported in the paper. Average Test Video-mAP (<span>&#177;</span> std) across the five repetitions is 61.82 (<span>&#177;</span> 0.51) for GCN and 59.58 (<span>&#177;</span> 0.22) for Baseline.
+We provide trained models (model weights and config files) for GCN and Baseline. There are 5 models for GCN and Baseline respectively, using the same hyperparameters, but with different initialized seeds. Models and results correspond to those reported in the paper. Average Test Video-mAP (<span>&#177;</span> std) across the five repetitions is 61.82 (<span>&#177;</span> 0.51) for GCN and 59.58 (<span>&#177;</span> 0.22) for Baseline. 
 
 #### GCN
 
