@@ -170,12 +170,12 @@ In the following, we describe the process of training and testing the Baseline m
 
 Train a GCN model:
 ```
-sh run/train_gcn.sh
+sh tools/train_gcn.sh
 ```
 
 Train a Baseline model:
 ```
-sh run/train_baseline.sh
+sh tools/train_baseline.sh
 ```
 
 Both commands above run `train.py`. For help and a description of input arguments:
@@ -198,13 +198,13 @@ to be used for inference.
 Inference on the test set using a GCN model:
 
 ```
-sh run/test_gcn.sh
+sh tools/test_gcn.sh
 ```
 
 Inference using a Baseline model:
 
 ```
-sh run/test_baseline.sh
+sh tools/test_baseline.sh
 ```
 
 Both commands above run `inference.py`. For help and a description of input arguments:
