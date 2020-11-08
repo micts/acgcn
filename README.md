@@ -178,7 +178,7 @@ Train a Baseline model:
 sh run/train_baseline.sh
 ```
 
-Both commands above run `main.py`. For help and a description of input arguments:
+Both commands above run `train.py`. For help and a description of input arguments:
 
 ```
 python tools/train.py -h
