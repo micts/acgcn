@@ -189,11 +189,7 @@ Every run is assigned a unique identifier/filename of the form `yyyy-mm-dd_hh-mm
 
 ### Inference<a name="inference"/>      
 
-Make sure to replace the values inside the following scripts with the model's information (model id, path to model weights, path to config file, etc.) to be used for inference. Use either a model you trained (model weights and config files are located in `results/`), or use one of the trained models already provided (see [Results](#results)).
-
-
-
-to be used for inference.  
+Make sure to replace the values inside the following scripts with the model's information (model id, path to model weights, path to config file, etc.) to be used for inference. Use either a model you trained (model weights and config files are located in `results/`), or use one of the trained models already provided (see [Results](#results)).    
 
 Inference on the test set using a GCN model:
 
