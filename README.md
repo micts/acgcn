@@ -1,6 +1,8 @@
 # acgcn
 
-Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection". Accepted to *International Workshop on Deep Learning for Human-Centric Activity Understanding (DL-HAU2020)* - ICPR 2020. The paper will be made available soon.
+Official PyTorch implementation of paper "Spot What Matters: Learning Context Using Graph Convolutional Networks for Weakly-Supervised Action Detection". Accepted to *International Workshop on Deep Learning for Human-Centric Activity Understanding (DL-HAU2020)* - ICPR 2020.
+
+**|**[Paper](https://liacs.leidenuniv.nl/~puttenpwhvander/library/Tsiaousis-DL-HAU2020.pdf)**|**
 
 acgcn -- Actor-Context/Centric Graph Convolutional Networks. 
 
