@@ -106,7 +106,7 @@ See [instructions](http://thoth.inrialpes.fr/daly/getdaly.php) on how to downloa
 **Important Note**    
 Several videos of DALY are not available on Youtube anymore, and others have different resolution than the original videos. It is recommended to download the original videos from Inria's cache, which can be accessed at http://thoth.inrialpes.fr/daly/requestaccess.php. It is recommended to check that all videos are available in the cache by matching them with those contained in the annotations (`/data/DALY/annotations/daly1.1.0.pkl`). 
 
-In order to download the videos from INRIA's cache, first modify the username and password in utils/download_videos.sh to the ones provided in INRIA's cache. Then download the videos using:
+In order to download the videos from INRIA's cache, first modify `utils/download_videos.sh` to provide the username and password required in INRIA's cache. Then download the videos using:
 
 ```
 cd utils/
