@@ -113,7 +113,7 @@ cd utils/
 ./download_videos.sh
 ```
 
-The script will save the videos in `data/DALY/DALY_videos`.
+The videos will be saved in `data/DALY/DALY_videos`.
 
 In case there are missing videos in the cache, you can always try to download them from Youtube, see link for instructions above.
 
